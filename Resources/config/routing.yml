@@ -1,0 +1,3 @@
+#ibtikar_google_services_homepage:
+#    path:     /
+#    defaults: { _controller: IbtikarGoogleServicesBundle:Default:index }

@@ -1,0 +1,29 @@
+{
+    "name": "Ibtikar/GoogleServicesBundle",
+    "type": "laravel-library",
+    "description": "Ibtikar Google services bundle",
+    "keywords": ["google API firebase "],
+    "homepage": "https://github.com/Ibtikar/GoogleServicesBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ibtikar"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "Ibtikar/ShareEconomyToolsBundle": "dev-master",
+        "composer/installers": "~1.0",
+        "doctrine/doctrine-migrations-bundle": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ibtikar\\GoogleServicesBundle\\": ""
+        }
+    },
+    "extra": {
+        "installer-paths": {
+            "src/{$name}": ["Ibtikar/GoogleServicesBundle"]
+        }
+    }
+}

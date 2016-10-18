@@ -1,5 +1,9 @@
 services:
 
+    firebase_cloud_messaging:
+        class: Ibtikar\GoogleServicesBundle\Service\FirebaseCloudMessaging
+        arguments: [ '%ibtikar_google_services.firebase_api_key%']
+
     firebase:
         class: Ibtikar\GoogleServicesBundle\Service\FireBaseHandler
         arguments: [ '%ibtikar_google_services.firebase_url_base%', '%ibtikar_google_services.firebase_database_secret%' ]

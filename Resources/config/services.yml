@@ -1,4 +1,13 @@
 services:
-#    ibtikar_google_services.example:
-#        class: Ibtikar\GoogleServicesBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+
+    firebase:
+        class: Ibtikar\GoogleServicesBundle\Service\FireBaseHandler
+        arguments: [ '%ibtikar_google_services.firebase_url_base%', '%ibtikar_google_services.firebase_database_secret%' ]
+
+    google.distancematrix:
+        class: Ibtikar\GoogleServicesBundle\Service\GoogleDistanceMatrix
+        arguments: [ '%ibtikar_google_services.google_distance_matrix_url_base%','%ibtikar_google_services.google_distance_matrix_key%' ]
+
+    google.directions:
+        class: Ibtikar\GoogleServicesBundle\Service\GoogleDirections
+        arguments: [ '%ibtikar_google_services.google_directions_url_base%','%ibtikar_google_services.google_directions_key%' ]

@@ -24,9 +24,4 @@ class Register
      */
     public $identifier;
 
-    /**
-     * @Assert\Type("numeric")
-     */
-    public $badgeNumber;
-
 }

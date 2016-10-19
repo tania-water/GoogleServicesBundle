@@ -18,7 +18,7 @@ Installation steps
 
 2.Require the package using composer by running
 
-    composer require Ibtikar/GoogleServicesBundle
+    require Ibtikar/GoogleServicesBundle:dev-master sngrl/php-firebase-cloud-messaging:dev-master
 
 3.Add to your appkernel the next line
 
@@ -62,7 +62,9 @@ Installation steps
         google_directions_key: '%google_directions_key%'
 
 8.Relating your user class to device class
+
     1.Let your user class implements Ibtikar\GoogleServicesBundle\Entity\DeviceUserInterface
+
     2.In your config.yml update doctrine section by adding the following:
         doctrine:
             orm:

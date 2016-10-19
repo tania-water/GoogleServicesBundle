@@ -3,6 +3,7 @@
 namespace Ibtikar\GoogleServicesBundle\Service;
 
 use sngrl\PhpFirebaseCloudMessaging\Recipient\Device;
+use sngrl\PhpFirebaseCloudMessaging\Recipient\Topic;
 use sngrl\PhpFirebaseCloudMessaging\Notification;
 use sngrl\PhpFirebaseCloudMessaging\Message;
 use sngrl\PhpFirebaseCloudMessaging\Client;
@@ -31,6 +32,29 @@ class FirebaseCloudMessaging
     }
 
     /**
+     * @param Device|Topic $reciver
+     * @param string $notificationTitle
+     * @param string $notificationBody
+     * @param array $notificationData
+     * @param int $deviceNotificationsCount
+     * @param string $messagePeriority
+     * @return boolean
+     */
+    private function sendNotification($reciver, $notificationTitle, $notificationBody, array $notificationData = array(), $deviceNotificationsCount = null, $messagePeriority = 'high')
+    {
+        $message = new Message();
+        $message->setPriority($messagePeriority);
+        $message->addRecipient($reciver);
+        $message->setData($notificationData);
+        $notification = new Notification($notificationTitle, $notificationBody);
+        if ($deviceNotificationsCount) {
+            $notification->setBadge($deviceNotificationsCount);
+        }
+        $message->setNotification($notification);
+        return $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+    }
+
+    /**
      * @param string $deviceToken
      * @param string $notificationTitle
      * @param string $notificationBody
@@ -41,16 +65,21 @@ class FirebaseCloudMessaging
      */
     public function sendNotificationToDevice($deviceToken, $notificationTitle, $notificationBody, array $notificationData = array(), $deviceNotificationsCount = null, $messagePeriority = 'high')
     {
-        $message = new Message();
-        $message->setPriority($messagePeriority);
-        $message->addRecipient(new Device($deviceToken));
-        $message->setData($notificationData);
-        $notification = new Notification($notificationTitle, $notificationBody);
-        if ($deviceNotificationsCount) {
-            $notification->setBadge($deviceNotificationsCount);
-        }
-        $message->setNotification($notification);
-        return $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+        return $this->sendNotification(new Device($deviceToken), $notificationTitle, $notificationBody, $notificationData, $deviceNotificationsCount, $messagePeriority);
+    }
+
+    /**
+     * @param string $topicId
+     * @param string $notificationTitle
+     * @param string $notificationBody
+     * @param array $notificationData
+     * @param int $deviceNotificationsCount
+     * @param string $messagePeriority
+     * @return boolean
+     */
+    public function sendNotificationToTopic($topicId, $notificationTitle, $notificationBody, array $notificationData = array(), $deviceNotificationsCount = null, $messagePeriority = 'high')
+    {
+        return $this->sendNotification(new Topic($topicId), $notificationTitle, $notificationBody, $notificationData, $deviceNotificationsCount, $messagePeriority);
     }
 
     /**

@@ -2,14 +2,19 @@
 
 namespace Ibtikar\GoogleServicesBundle\Service;
 
+use sngrl\PhpFirebaseCloudMessaging\Recipient\Device;
+use sngrl\PhpFirebaseCloudMessaging\Notification;
+use sngrl\PhpFirebaseCloudMessaging\Message;
+use sngrl\PhpFirebaseCloudMessaging\Client;
+
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
  */
 class FirebaseCloudMessaging
 {
 
-    /** @var $fireBaseAPIKey string */
-    private $fireBaseAPIKey;
+    /** @var $fireBaseHTTPClient Client */
+    private $fireBaseHTTPClient;
 
     /**
      * @param string $fireBaseAPIKey
@@ -20,7 +25,51 @@ class FirebaseCloudMessaging
         if (!$fireBaseAPIKey) {
             throw new \Exception('You should set "firebase_api_key" parameter under the bundle configuration "ibtikar_google_services"');
         }
-        $this->fireBaseAPIKey = $fireBaseAPIKey;
+        $this->fireBaseHTTPClient = new Client();
+        $this->fireBaseHTTPClient->setApiKey($fireBaseAPIKey);
+        $this->fireBaseHTTPClient->injectGuzzleHttpClient(new \GuzzleHttp\Client());
     }
 
+    /**
+     * @param string $deviceToken
+     * @param string $notificationTitle
+     * @param string $notificationBody
+     * @param array $notificationData
+     * @param int $deviceNotificationsCount
+     * @param string $messagePeriority
+     * @return boolean
+     */
+    public function sendNotificationToDevice($deviceToken, $notificationTitle, $notificationBody, array $notificationData = array(), $deviceNotificationsCount = null, $messagePeriority = 'high')
+    {
+        $message = new Message();
+        $message->setPriority($messagePeriority);
+        $message->addRecipient(new Device($deviceToken));
+        $message->setData($notificationData);
+        $notification = new Notification($notificationTitle, $notificationBody);
+        if ($deviceNotificationsCount) {
+            $notification->setBadge($deviceNotificationsCount);
+        }
+        $message->setNotification($notification);
+        return $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+    }
+
+    /**
+     * @param string $topicId
+     * @param array $devicesTokens
+     * @return boolean
+     */
+    public function subscribeDevicesToTopic($topicId, array $devicesTokens)
+    {
+        return $this->fireBaseHTTPClient->addTopicSubscription($topicId, $devicesTokens)->getStatusCode() == 200 ? true : false;
+    }
+
+    /**
+     * @param string $topicId
+     * @param array $devicesTokens
+     * @return boolean
+     */
+    public function removeDevicesFromTopic($topicId, array $devicesTokens)
+    {
+        return $this->fireBaseHTTPClient->removeTopicSubscription($topicId, $devicesTokens)->getStatusCode() == 200 ? true : false;
+    }
 }

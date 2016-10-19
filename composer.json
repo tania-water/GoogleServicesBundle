@@ -15,7 +15,7 @@
         "sngrl/php-firebase-cloud-messaging": "dev-master",
         "Ibtikar/ShareEconomyToolsBundle": "dev-master",
         "composer/installers": "~1.0",
-        "doctrine/doctrine-migrations-bundle": "^1.0"
+        "doctrine/doctrine-migrations-bundle": "^1.1"
     },
     "autoload": {
         "psr-4": {

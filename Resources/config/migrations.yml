@@ -1,0 +1,4 @@
+name: Google services bundle
+migrations_namespace: Ibtikar\GoogleServicesBundle\Migrations
+table_name: migration_versions_google_services
+migrations_directory: "src/Ibtikar/GoogleServicesBundle/Migrations"

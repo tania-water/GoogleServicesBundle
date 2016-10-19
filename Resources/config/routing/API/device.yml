@@ -1,0 +1,4 @@
+ibtikar_google_services_device_register:
+    path:     /register
+    defaults: { _controller: IbtikarGoogleServicesBundle:API\Device:register }
+    methods: POST

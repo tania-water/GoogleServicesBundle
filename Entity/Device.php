@@ -3,7 +3,6 @@
 namespace Ibtikar\GoogleServicesBundle\Entity;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Device
 {
+
+    use \Ibtikar\ShareEconomyToolsBundle\Entity\TrackableTrait;
 
     /**
      * @var int
@@ -57,22 +58,6 @@ class Device
      * @ORM\Column(name="badgeNumber", type="integer", nullable=true)
      */
     private $badgeNumber;
-
-    /**
-     * @var \DateTime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
-    private $created;
-
-    /**
-     * @var \DateTime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
-    private $updated;
 
     /**
      * Get id
@@ -203,53 +188,4 @@ class Device
     {
         return $this->badgeNumber;
     }
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return Device
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     *
-     * @return Device
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
 }

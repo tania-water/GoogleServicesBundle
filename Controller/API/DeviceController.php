@@ -13,7 +13,7 @@ class DeviceController extends Controller
 {
 
     /**
-     * Register device
+     * Register new device
      *
      * @ApiDoc(
      *  section="Device",
@@ -63,7 +63,7 @@ class DeviceController extends Controller
     }
 
     /**
-     * Set the ios devices notification count
+     * Set the ios device notification count
      *
      * @ApiDoc(
      *  section="Device",

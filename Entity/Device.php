@@ -2,7 +2,6 @@
 
 namespace Ibtikar\GoogleServicesBundle\Entity;
 
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="device")
  * @ORM\Entity(repositoryClass="Ibtikar\GoogleServicesBundle\Repository\DeviceRepository")
- * @UniqueEntity(fields={"identifier"})
  */
 class Device
 {

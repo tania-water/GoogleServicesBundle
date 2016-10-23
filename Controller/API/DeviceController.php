@@ -42,22 +42,21 @@ class DeviceController extends Controller
         if ($validationErrorsResponse) {
             return $validationErrorsResponse;
         }
-        $device = new Device();
-        $deviceType = $request->attributes->get('requestFrom');
-        if ($deviceType) {
-            $device->setType($deviceType);
+        $em = $this->getDoctrine()->getManager();
+        $device = $em->getRepository('IbtikarGoogleServicesBundle:Device')->findOneByIdentifier($registerDevice->identifier);
+        if (!$device) {
+            $device = new Device();
+            $deviceType = $request->attributes->get('requestFrom');
+            if ($deviceType) {
+                $device->setType($deviceType);
+            }
+            $em->persist($device);
         }
         $APIOperations->bindObjectDataFromObject($device, $registerDevice, true);
-        $errorsObjects = $this->get('validator')->validate($device);
-        if (count($errorsObjects) > 0) {
-            return $APIOperations->getValidationErrorsJsonResponse($errorsObjects);
-        }
         $user = $this->getUser();
         if ($user) {
             $device->setUser($user);
         }
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($device);
         $em->flush();
         return $APIOperations->getSuccessJsonResponse();
     }

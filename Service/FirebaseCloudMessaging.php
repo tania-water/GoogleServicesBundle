@@ -37,8 +37,11 @@ class FirebaseCloudMessaging
      * @param string $messagePeriority
      * @return boolean
      */
-    private function sendMessage($reciver, array $data = array(), $messagePeriority = 'high')
+    private function sendMessage($reciver, array $data, $messagePeriority = 'high')
     {
+        if (count($data) === 0) {
+            throw new \Exception('You must set the data to send.');
+        }
         $message = new Message();
         $message->setPriority($messagePeriority);
         $message->addRecipient($reciver);
@@ -50,24 +53,24 @@ class FirebaseCloudMessaging
 
     /**
      * @param string $deviceToken
-     * @param array $notificationData
+     * @param array $data
      * @param string $messagePeriority
      * @return boolean
      */
-    public function sendMessageToDevice($deviceToken, array $notificationData = array(), $messagePeriority = 'high')
+    public function sendMessageToDevice($deviceToken, array $data, $messagePeriority = 'high')
     {
-        return $this->sendMessage(new Device($deviceToken), $notificationData, $messagePeriority);
+        return $this->sendMessage(new Device($deviceToken), $data, $messagePeriority);
     }
 
     /**
      * @param string $topicId
-     * @param array $notificationData
+     * @param array $data
      * @param string $messagePeriority
      * @return boolean
      */
-    public function sendMessageToTopic($topicId, array $notificationData = array(), $messagePeriority = 'high')
+    public function sendMessageToTopic($topicId, array $data, $messagePeriority = 'high')
     {
-        return $this->sendMessage(new Topic($topicId), $notificationData, $messagePeriority);
+        return $this->sendMessage(new Topic($topicId), $data, $messagePeriority);
     }
 
     /**

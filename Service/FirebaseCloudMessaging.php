@@ -35,6 +35,23 @@ class FirebaseCloudMessaging
      * @param Device|Topic $reciver
      * @param array $data
      * @param string $messagePeriority
+     * @return Message
+     */
+    private function getFirebaseMessage($reciver, array $data = array(), $messagePeriority = 'high')
+    {
+        $message = new Message();
+        $message->setPriority($messagePeriority);
+        $message->addRecipient($reciver);
+        if (count($data) > 0) {
+            $message->setData($data);
+        }
+        return $message;
+    }
+
+    /**
+     * @param Device|Topic $reciver
+     * @param array $data
+     * @param string $messagePeriority
      * @return boolean
      */
     private function sendMessage($reciver, array $data, $messagePeriority = 'high')
@@ -42,12 +59,7 @@ class FirebaseCloudMessaging
         if (count($data) === 0) {
             throw new \Exception('You must set the data to send.');
         }
-        $message = new Message();
-        $message->setPriority($messagePeriority);
-        $message->addRecipient($reciver);
-        if (count($data) > 0) {
-            $message->setData($data);
-        }
+        $message = $this->getFirebaseMessage($reciver, $data, $messagePeriority);
         return $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
     }
 
@@ -84,44 +96,41 @@ class FirebaseCloudMessaging
      */
     private function sendNotification($reciver, $notificationTitle, $notificationBody, array $data = array(), $deviceNotificationsCount = null, $messagePeriority = 'high')
     {
+        $message = $this->getFirebaseMessage($reciver, $data, $messagePeriority);
         $notification = new Notification($notificationTitle, $notificationBody);
-        $notification->setPriority($messagePeriority);
-        $notification->addRecipient($reciver);
-        if (count($data) > 0) {
-            $notification->setData($data);
-        }
         if ($deviceNotificationsCount) {
             $notification->setBadge($deviceNotificationsCount);
         }
-        return $this->fireBaseHTTPClient->send($notification)->getStatusCode() == 200 ? true : false;
+        $message->setNotification($notification);
+        return $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
     }
 
     /**
      * @param string $deviceToken
      * @param string $notificationTitle
      * @param string $notificationBody
-     * @param array $notificationData
+     * @param array $data
      * @param int $deviceNotificationsCount
      * @param string $messagePeriority
      * @return boolean
      */
-    public function sendNotificationToDevice($deviceToken, $notificationTitle, $notificationBody, array $notificationData = array(), $deviceNotificationsCount = null, $messagePeriority = 'high')
+    public function sendNotificationToDevice($deviceToken, $notificationTitle, $notificationBody, array $data = array(), $deviceNotificationsCount = null, $messagePeriority = 'high')
     {
-        return $this->sendNotification(new Device($deviceToken), $notificationTitle, $notificationBody, $notificationData, $deviceNotificationsCount, $messagePeriority);
+        return $this->sendNotification(new Device($deviceToken), $notificationTitle, $notificationBody, $data, $deviceNotificationsCount, $messagePeriority);
     }
 
     /**
      * @param string $topicId
      * @param string $notificationTitle
      * @param string $notificationBody
-     * @param array $notificationData
+     * @param array $data
      * @param int $deviceNotificationsCount
      * @param string $messagePeriority
      * @return boolean
      */
-    public function sendNotificationToTopic($topicId, $notificationTitle, $notificationBody, array $notificationData = array(), $deviceNotificationsCount = null, $messagePeriority = 'high')
+    public function sendNotificationToTopic($topicId, $notificationTitle, $notificationBody, array $data = array(), $deviceNotificationsCount = null, $messagePeriority = 'high')
     {
-        return $this->sendNotification(new Topic($topicId), $notificationTitle, $notificationBody, $notificationData, $deviceNotificationsCount, $messagePeriority);
+        return $this->sendNotification(new Topic($topicId), $notificationTitle, $notificationBody, $data, $deviceNotificationsCount, $messagePeriority);
     }
 
     /**

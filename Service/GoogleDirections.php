@@ -12,7 +12,6 @@ namespace Ibtikar\GoogleServicesBundle\Service;
  */
 class GoogleDirections
 {
-
     protected $authToken;
     protected $baseUrl;
 
@@ -35,15 +34,37 @@ class GoogleDirections
      * get directions from google
      * @return Json
      */
-    public function fareEstimate($longSource, $latSource, $longDestination, $latDestination)
+    public function getWayPoints($longSource, $latSource, $longDestination, $latDestination)
     {
         $params = [
             'key' => $this->authToken,
-            'origins' => "$latSource,$longSource",
-            'destinations' => "$latDestination,$longDestination",
+            'origin' => "$latSource,$longSource",
+            'destination' => "$latDestination,$longDestination",
         ];
         $url = $this->baseUrl;
         return self::CallAPI('GET', $url, $params);
+    }
+
+    /**
+     * @author Micheal Mouner <micheal.mouner@ibtikar.net.sa>
+     * get directions from google
+     * @return Json
+     */
+    public function getImage($googleDirectionsResponse)
+    {
+        $path = "";
+        foreach ($googleDirectionsResponse['routes'][0]['legs'][0]['steps'] as $step) {
+            $path .= $step['start_location']['lat'] . "," . $step['start_location']['lng'] . "|";
+        }
+        $path = substr($path, 0, -1);
+        $params = [
+            'path' => "color:0x0000ff|weight:5|$path",
+            'size' => '512x512',
+        ];
+        //?path=color:0x0000ff%7Cweight:5%7C40.737102,-73.990318%7C40.749825,-73.987963%7C40.752946,-73.987384%7C40.755823,-73.986397&size=512x512
+        $url = "https://maps.googleapis.com/maps/api/staticmap?" . http_build_query($params);
+
+        return $url;
     }
 
     /**
@@ -84,8 +105,6 @@ class GoogleDirections
             );
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
         }
-
-        $url;
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 

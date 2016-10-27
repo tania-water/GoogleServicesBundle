@@ -32,7 +32,7 @@ class Device
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=190)
      */
     private $type;
 
@@ -46,7 +46,7 @@ class Device
     /**
      * @var string
      *
-     * @ORM\Column(name="identifier", type="string", length=255, unique=true)
+     * @ORM\Column(name="identifier", type="string", length=190, unique=true)
      */
     private $identifier;
 

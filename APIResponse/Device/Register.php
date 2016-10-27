@@ -19,7 +19,7 @@ class Register
 
     /**
      * @Assert\Type("scalar")
-     * @Assert\Length(max=255)
+     * @Assert\Length(max=190)
      * @Assert\NotBlank
      */
     public $identifier;

@@ -50,7 +50,7 @@ class GoogleDirections
      * get directions from google
      * @return Json
      */
-    public function getImage($googleDirectionsResponse)
+    public function getImageUrl($googleDirectionsResponse)
     {
         $path = "";
         foreach ($googleDirectionsResponse['routes'][0]['legs'][0]['steps'] as $step) {

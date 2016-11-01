@@ -17,18 +17,32 @@ class FirebaseCloudMessaging
     /** @var $fireBaseHTTPClient Client */
     private $fireBaseHTTPClient;
 
+    /** @var $logger \Monolog\Logger */
+    private $logger;
+
     /**
      * @param string $fireBaseAPIKey
+     * @param \Monolog\Logger $logger
      * @throws \Exception
      */
-    public function __construct($fireBaseAPIKey)
+    public function __construct($fireBaseAPIKey, $logger)
     {
         if (!$fireBaseAPIKey) {
             throw new \Exception('You should set "firebase_api_key" parameter under the bundle configuration "ibtikar_google_services"');
         }
+        $this->logger = $logger;
         $this->fireBaseHTTPClient = new Client();
         $this->fireBaseHTTPClient->setApiKey($fireBaseAPIKey);
         $this->fireBaseHTTPClient->injectGuzzleHttpClient(new \GuzzleHttp\Client());
+    }
+
+    /**
+     * @param Device|Topic $reciver
+     * @return string
+     */
+    private function getReciverText($reciver)
+    {
+        return $reciver instanceof Device ? 'Token: ' . $reciver->getToken() : 'Topic: ' . $reciver->getName();
     }
 
     /**
@@ -45,6 +59,7 @@ class FirebaseCloudMessaging
         if (count($data) > 0) {
             $message->setData($data);
         }
+        $this->logger->log('info', 'Sending to ' . $this->getReciverText($reciver));
         return $message;
     }
 
@@ -60,7 +75,9 @@ class FirebaseCloudMessaging
             throw new \Exception('You must set the data to send.');
         }
         $message = $this->getFirebaseMessage($reciver, $data, $messagePeriority);
-        return $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+        $sendingStatus = $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+        $this->logger->log('info', 'Sending message to "' . $this->getReciverText($reciver) . '" data: "' . serialize($data) . '" finished with ' . ($sendingStatus ? 'success' : 'error'));
+        return $sendingStatus;
     }
 
     /**
@@ -102,7 +119,9 @@ class FirebaseCloudMessaging
             $notification->setBadge($deviceNotificationsCount);
         }
         $message->setNotification($notification);
-        return $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+        $sendingStatus = $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+        $this->logger->log('info', 'Sending notification "' . $notificationTitle . '" to "' . $this->getReciverText($reciver) . '" data: "' . serialize($data) . '" finished with ' . ($sendingStatus ? 'success' : 'error'));
+        return $sendingStatus;
     }
 
     /**

@@ -2,7 +2,9 @@ services:
 
     firebase_cloud_messaging:
         class: Ibtikar\GoogleServicesBundle\Service\FirebaseCloudMessaging
-        arguments: [ '%ibtikar_google_services.firebase_api_key%']
+        arguments: [ '%ibtikar_google_services.firebase_api_key%', '@logger' ]
+        tags:
+             - { name: monolog.logger, channel: firebase_notifications }
 
     firebase:
         class: Ibtikar\GoogleServicesBundle\Service\FireBaseHandler

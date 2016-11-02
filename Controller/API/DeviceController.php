@@ -21,12 +21,14 @@ class DeviceController extends Controller
      *  statusCodes={
      *      200="Returned on success",
      *      403="Returned if the api key is not valid",
-     *      404="Returned if the page was not found"
+     *      404="Returned if the page was not found",
+     *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200="Ibtikar\ShareEconomyToolsBundle\APIResponse\Success",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
-     *      404="Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound"
+     *      404="Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound",
+     *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -70,12 +72,14 @@ class DeviceController extends Controller
      *  statusCodes={
      *      200="Returned on success",
      *      403="Returned if the api key is not valid",
-     *      404="Returned if the page was not found"
+     *      404="Returned if the page was not found",
+     *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200="Ibtikar\ShareEconomyToolsBundle\APIResponse\Success",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
-     *      404="Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound"
+     *      404="Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound",
+     *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>

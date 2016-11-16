@@ -12,6 +12,7 @@ class SetIOSBadge
 
     /**
      * @Assert\Type("integer")
+     * @Assert\Range(min=0)
      * @Assert\NotBlank
      */
     public $badgeNumber;

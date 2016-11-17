@@ -58,6 +58,7 @@ class GoogleDirections
         }
         $path = substr($path, 0, -1);
         $params = [
+            'format' => 'png',
             'path' => "color:0x0000ff|weight:5|$path",
             'size' => '512x512',
         ];

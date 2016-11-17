@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
  */
-class SetIOSBadge
+class SetIOSBadge extends Device
 {
 
     /**
@@ -16,12 +16,5 @@ class SetIOSBadge
      * @Assert\NotBlank
      */
     public $badgeNumber;
-
-    /**
-     * @Assert\Type("scalar")
-     * @Assert\Length(max=190)
-     * @Assert\NotBlank
-     */
-    public $identifier;
 
 }

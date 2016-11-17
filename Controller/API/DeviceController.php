@@ -22,12 +22,14 @@ class DeviceController extends Controller
      *      200="Returned on success",
      *      403="Returned if the api key is not valid",
      *      404="Returned if the page was not found",
+     *      422="Returned if there is a validation error",
      *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200="Ibtikar\ShareEconomyToolsBundle\APIResponse\Success",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
      *      404="Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound",
+     *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\ValidationErrors",
      *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
@@ -45,6 +47,7 @@ class DeviceController extends Controller
             return $validationErrorsResponse;
         }
         $em = $this->getDoctrine()->getManager();
+        /* @var $device \Ibtikar\GoogleServicesBundle\Entity\Device */
         $device = $em->getRepository('IbtikarGoogleServicesBundle:Device')->findOneByIdentifier($registerDevice->identifier);
         if (!$device) {
             $device = new Device();
@@ -73,12 +76,14 @@ class DeviceController extends Controller
      *      200="Returned on success",
      *      403="Returned if the api key is not valid",
      *      404="Returned if the page was not found",
+     *      422="Returned if there is a validation error",
      *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200="Ibtikar\ShareEconomyToolsBundle\APIResponse\Success",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
      *      404="Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound",
+     *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\ValidationErrors",
      *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
@@ -96,11 +101,57 @@ class DeviceController extends Controller
             return $validationErrorsResponse;
         }
         $em = $this->getDoctrine()->getManager();
+        /* @var $device \Ibtikar\GoogleServicesBundle\Entity\Device */
         $device = $em->getRepository('IbtikarGoogleServicesBundle:Device')->findOneBy(array('type' => 'ios', 'identifier' => $setIOSBadge->identifier));
         if (!$device) {
             return $APIOperations->getNotFoundErrorJsonResponse('Device not found.');
         }
         $device->setBadgeNumber($setIOSBadge->badgeNumber);
+        $em->flush();
+        return $APIOperations->getSuccessJsonResponse();
+    }
+
+    /**
+     * Remove the device relation with the current registered user
+     *
+     * @ApiDoc(
+     *  section="Device",
+     *  input="Ibtikar\GoogleServicesBundle\APIResponse\Device\Device",
+     *  statusCodes={
+     *      200="Returned on success",
+     *      403="Returned if the api key is not valid",
+     *      404="Returned if device was not found",
+     *      422="Returned if there is a validation error",
+     *      500="Returned if there is an internal server error"
+     *  },
+     *  responseMap = {
+     *      200="Ibtikar\ShareEconomyToolsBundle\APIResponse\Success",
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
+     *      404="Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound",
+     *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\ValidationErrors",
+     *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
+     *  }
+     * )
+     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function removeDeviceUserAction(Request $request)
+    {
+        /* @var $APIOperations \Ibtikar\ShareEconomyToolsBundle\Service\APIOperations */
+        $APIOperations = $this->get('api_operations');
+        $deviceInput = new DeviceResponses\Device();
+        $validationErrorsResponse = $APIOperations->bindAndValidateObjectDataFromRequst($deviceInput, $request);
+        if ($validationErrorsResponse) {
+            return $validationErrorsResponse;
+        }
+        $em = $this->getDoctrine()->getManager();
+        /* @var $device \Ibtikar\GoogleServicesBundle\Entity\Device */
+        $device = $em->getRepository('IbtikarGoogleServicesBundle:Device')->findOneByIdentifier($deviceInput->identifier);
+        if (!$device) {
+            return $APIOperations->getNotFoundErrorJsonResponse();
+        }
+        $device->setUser(null);
         $em->flush();
         return $APIOperations->getSuccessJsonResponse();
     }

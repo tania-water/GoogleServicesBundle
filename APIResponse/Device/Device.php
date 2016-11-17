@@ -7,14 +7,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
  */
-class Register extends Device
+class Device
 {
 
     /**
      * @Assert\Type("scalar")
-     * @Assert\Length(max=3072)
+     * @Assert\Length(max=190)
      * @Assert\NotBlank
      */
-    public $token;
+    public $identifier;
 
 }

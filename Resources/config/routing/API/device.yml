@@ -3,6 +3,11 @@ ibtikar_google_services_device_register:
     defaults: { _controller: IbtikarGoogleServicesBundle:API\Device:register }
     methods: POST
 
+ibtikar_google_services_remove_device_user:
+    path:     /remove-device-user
+    defaults: { _controller: IbtikarGoogleServicesBundle:API\Device:removeDeviceUser }
+    methods: POST
+
 ibtikar_google_services_set_ios_badge:
     path:     /set-ios-badge
     defaults: { _controller: IbtikarGoogleServicesBundle:API\Device:setIOSBadge }

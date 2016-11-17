@@ -75,7 +75,12 @@ class FirebaseCloudMessaging
             throw new \Exception('You must set the data to send.');
         }
         $message = $this->getFirebaseMessage($reciver, $data, $messagePeriority);
-        $sendingStatus = $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+        try {
+            $sendingStatus = $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+        } catch (\Exception $e) {
+            $this->logger->log('error', $e->getTraceAsString());
+            $sendingStatus = false;
+        }
         $this->logger->log('info', 'Sending message to "' . $this->getReciverText($reciver) . '" data: "' . serialize($data) . '" finished with ' . ($sendingStatus ? 'success' : 'error'));
         return $sendingStatus;
     }
@@ -119,7 +124,12 @@ class FirebaseCloudMessaging
             $notification->setBadge($deviceNotificationsCount);
         }
         $message->setNotification($notification);
-        $sendingStatus = $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+        try {
+            $sendingStatus = $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;
+        } catch (\Exception $e) {
+            $this->logger->log('error', $e->getTraceAsString());
+            $sendingStatus = false;
+        }
         $this->logger->log('info', 'Sending notification "' . $notificationTitle . '" to "' . $this->getReciverText($reciver) . '" data: "' . serialize($data) . '" finished with ' . ($sendingStatus ? 'success' : 'error'));
         return $sendingStatus;
     }

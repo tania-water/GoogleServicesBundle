@@ -14,10 +14,10 @@ use sngrl\PhpFirebaseCloudMessaging\Client;
 class FirebaseCloudMessaging
 {
 
-    /** @var $fireBaseHTTPClient Client */
+    /* @var $fireBaseHTTPClient \sngrl\PhpFirebaseCloudMessaging\Client */
     private $fireBaseHTTPClient;
 
-    /** @var $logger \Monolog\Logger */
+    /* @var $logger \Monolog\Logger */
     private $logger;
 
     /**

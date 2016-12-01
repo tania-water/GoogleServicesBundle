@@ -1,5 +1,4 @@
 <?php
-
 https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=Washington,DC&destinations=New+York+City,NY&key=AIzaSyBApKO8bWPA3XdN3ZsKqM2z7p5caTQZD9c
 
 namespace Ibtikar\GoogleServicesBundle\Service;
@@ -12,6 +11,7 @@ namespace Ibtikar\GoogleServicesBundle\Service;
  */
 class GoogleDirections
 {
+
     protected $authToken;
     protected $baseUrl;
 
@@ -40,6 +40,7 @@ class GoogleDirections
             'key' => $this->authToken,
             'origin' => "$latSource,$longSource",
             'destination' => "$latDestination,$longDestination",
+            'alternatives' => "true",
         ];
         $url = $this->baseUrl;
         return self::CallAPI('GET', $url, $params);
@@ -66,6 +67,19 @@ class GoogleDirections
         $url = "https://maps.googleapis.com/maps/api/staticmap?" . http_build_query($params);
 
         return $url;
+    }
+
+    public function getBestRoute($googleDirectionsResponse)
+    {
+        $distance = 0;
+        $duration = 0;
+        foreach ($googleDirectionsResponse['routes'][0]['legs'] as $key => $route) {
+            if ($route['distance']['value'] < $distance || $key == 0) {
+                $distance = $route['distance']['value'];
+                $duration = $route['duration']['value'];
+            }
+        }
+        return array($distance, $duration);
     }
 
     /**
@@ -114,5 +128,4 @@ class GoogleDirections
 
         return $result;
     }
-
 }

@@ -25,6 +25,7 @@ class Device
     private $id;
 
     /**
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @ORM\ManyToOne(targetEntity="DeviceUserInterface")
      */
     private $user;

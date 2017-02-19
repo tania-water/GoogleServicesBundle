@@ -123,6 +123,9 @@ class FirebaseCloudMessaging
         if ($deviceNotificationsCount) {
             $notification->setBadge($deviceNotificationsCount);
         }
+        if(isset($data['sound'])){
+            $notification->setSound($data['sound']);
+        }
         $message->setNotification($notification);
         try {
             $sendingStatus = $this->fireBaseHTTPClient->send($message)->getStatusCode() == 200 ? true : false;

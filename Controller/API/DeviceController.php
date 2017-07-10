@@ -17,6 +17,9 @@ class DeviceController extends Controller
      *
      * @ApiDoc(
      *  section="Device",
+     *  tags={
+     *     "stable"="green"
+     *  },
      *  input="Ibtikar\GoogleServicesBundle\APIResponse\Device\Register",
      *  statusCodes={
      *      200="Returned on success",
@@ -71,6 +74,9 @@ class DeviceController extends Controller
      *
      * @ApiDoc(
      *  section="Device",
+     *  tags={
+     *     "stable"="green"
+     *  },
      *  input="Ibtikar\GoogleServicesBundle\APIResponse\Device\SetIOSBadge",
      *  statusCodes={
      *      200="Returned on success",
@@ -116,6 +122,9 @@ class DeviceController extends Controller
      *
      * @ApiDoc(
      *  section="Device",
+     *  tags={
+     *     "stable"="green"
+     *  },
      *  input="Ibtikar\GoogleServicesBundle\APIResponse\Device\Device",
      *  statusCodes={
      *      200="Returned on success",

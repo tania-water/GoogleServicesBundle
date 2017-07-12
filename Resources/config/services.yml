@@ -10,6 +10,10 @@ services:
         class: Ibtikar\GoogleServicesBundle\Service\FireBaseHandler
         arguments: [ '%ibtikar_google_services.firebase_url_base%', '%ibtikar_google_services.firebase_database_secret%' ]
 
+    firebase_database:
+        class: Ibtikar\GoogleServicesBundle\Service\FireBaseRetrievingData
+        arguments: ['%ibtikar_google_services.firebase_credentials_path%' ]
+
     google.distancematrix:
         class: Ibtikar\GoogleServicesBundle\Service\GoogleDistanceMatrix
         arguments: [ '%ibtikar_google_services.google_distance_matrix_url_base%','%ibtikar_google_services.google_distance_matrix_key%' ]

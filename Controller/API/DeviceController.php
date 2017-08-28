@@ -53,12 +53,15 @@ class DeviceController extends Controller
         /* @var $device \Ibtikar\GoogleServicesBundle\Entity\Device */
         $device = $em->getRepository('IbtikarGoogleServicesBundle:Device')->findOneByIdentifier($registerDevice->identifier);
         if (!$device) {
-            $device = new Device();
-            $deviceType = $request->attributes->get('requestFrom');
-            if ($deviceType) {
-                $device->setType($deviceType);
+            $device = $em->getRepository('IbtikarGoogleServicesBundle:Device')->findOneByToken($registerDevice->token);
+            if (!$device) {
+                $device = new Device();
+                $deviceType = $request->attributes->get('requestFrom');
+                if ($deviceType) {
+                    $device->setType($deviceType);
+                }
+                $em->persist($device);
             }
-            $em->persist($device);
         }
         $APIOperations->bindObjectDataFromObject($device, $registerDevice, true);
         $user = $this->getUser();

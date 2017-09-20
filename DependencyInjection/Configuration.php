@@ -26,6 +26,9 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('shorten_url_key')
+                    ->defaultNull()
+                ->end()
                 ->scalarNode('firebase_api_key')
                     ->defaultNull()
                 ->end()

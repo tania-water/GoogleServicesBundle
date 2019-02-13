@@ -42,6 +42,7 @@ class DeviceController extends Controller
      */
     public function registerAction(Request $request)
     {
+
         /* @var $APIOperations \Ibtikar\ShareEconomyToolsBundle\Service\APIOperations */
         $APIOperations = $this->get('api_operations');
         $registerDevice = new DeviceResponses\Register();
